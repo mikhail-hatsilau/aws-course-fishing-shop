@@ -1,0 +1,28 @@
+service: product-service
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs14.x
+  region: eu-west-1
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+custom:
+  webpack:
+    webpackConfig: './webpack.config.js'
+    includeModules: true
+    packager: 'npm'
+    excludeFiles: tests/**/*.spec.js
+
+functions:
+  getProductsList:
+    handler: src/handler.getProductsList
+    events:
+      - http:
+          method: get
+          path: /api/v1/products
