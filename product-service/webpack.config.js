@@ -8,8 +8,6 @@ const lazyImports = [
   '@nestjs/websockets/socket-module',
 ];
 
-console.log(slsw.lib.entries);
-
 module.exports = {
   entry: slsw.lib.entries,
   mode: slsw.lib.webpack.isLocal ? "development" : "production",
@@ -18,11 +16,7 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        loader: 'babel-loader',
-        options: {
-          presets: ['@babel/preset-typescript'],
-          plugins: [['@babel/plugin-proposal-decorators', { legacy: true }]]
-        },
+        loader: 'ts-loader',
         exclude: /node_modules/,
       },
     ],
