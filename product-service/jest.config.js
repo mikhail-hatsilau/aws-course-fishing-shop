@@ -21,8 +21,4 @@ module.exports = {
   transformIgnorePatterns: [
     "/node_modules/",
   ],
-    // transform: {
-    //   "^.+\\.js$": "babel-jest",
-    //   "^.+\\.ts$": "ts-jest"
-    // },
 };

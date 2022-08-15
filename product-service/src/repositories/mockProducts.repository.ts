@@ -10,14 +10,30 @@ const products: Product[] = [
     title: 'Salmo Extreme BP Feeder 090 3.60 / 3133-360',
     categoryId: 'c8c1770a-abb1-4dba-92e0-07528757db58',
     count: 1,
+    images: [
+      {
+        id: 'fba6311a-f62e-47b0-84a3-9747adf18e91',
+        source:
+          'https://d3l7qw9cnbm9m7.cloudfront.net/salmo_extreme_feeder_bp_090.webp',
+        main: true,
+      },
+    ],
   },
   {
-    description: 'Feeder SE F1',
+    description: 'RS Sport Feeder',
     id: '7567ec4b-b10c-48c5-9345-fc73c48a80a1',
     price: 3,
-    title: 'Feeder SE F1',
+    title: 'RS Sport Feeder',
     categoryId: '33186d10-e4bf-4c07-9cca-df2fb2033067',
     count: 4,
+    images: [
+      {
+        id: 'fba6311a-f62e-47b0-84a3-9747adf18e91',
+        source:
+          'https://d3l7qw9cnbm9m7.cloudfront.net/rs_sport_feeder_reka.webp',
+        main: true,
+      },
+    ],
   },
   {
     description: 'Feeder Concept Distance 70 3.60 / FCDI070-360',
@@ -26,6 +42,14 @@ const products: Product[] = [
     title: 'Feeder Concept Distance 70 3.60 / FCDI070-360',
     categoryId: 'c8c1770a-abb1-4dba-92e0-07528757db58',
     count: 10,
+    images: [
+      {
+        id: 'fba6311a-f62e-47b0-84a3-9747adf18e91',
+        source:
+          'https://d3l7qw9cnbm9m7.cloudfront.net/feeder_concept_distance_70.webp',
+        main: true,
+      },
+    ],
   },
   {
     description: 'Salmo Diamond BP Feeder 090 3.90 / 4029-390',
@@ -34,6 +58,14 @@ const products: Product[] = [
     title: 'Salmo Diamond BP Feeder 090 3.90 / 4029-390',
     categoryId: 'c8c1770a-abb1-4dba-92e0-07528757db58',
     count: 3,
+    images: [
+      {
+        id: 'fba6311a-f62e-47b0-84a3-9747adf18e91',
+        source:
+          'https://d3l7qw9cnbm9m7.cloudfront.net/salmo_diamond_bp_feeder_090.webp',
+        main: true,
+      },
+    ],
   },
   {
     description: 'Salmo Extreme BP Feeder 150 3.60 / 3138-360',
@@ -42,6 +74,14 @@ const products: Product[] = [
     title: 'Salmo Extreme BP Feeder 150 3.60 / 3138-360',
     categoryId: 'c8c1770a-abb1-4dba-92e0-07528757db58',
     count: 10,
+    images: [
+      {
+        id: 'fba6311a-f62e-47b0-84a3-9747adf18e91',
+        source:
+          'https://d3l7qw9cnbm9m7.cloudfront.net/salmo_extreme_bp_feeder_150.webp',
+        main: true,
+      },
+    ],
   },
   {
     description: 'Robinson Carbonic Feeder 3+3g / 1CB-FE-392',
@@ -50,6 +90,14 @@ const products: Product[] = [
     title: 'Robinson Carbonic Feeder 3+3g / 1CB-FE-392',
     categoryId: 'c8c1770a-abb1-4dba-92e0-07528757db58',
     count: 2,
+    images: [
+      {
+        id: 'fba6311a-f62e-47b0-84a3-9747adf18e91',
+        source:
+          'https://d3l7qw9cnbm9m7.cloudfront.net/robinson_carbonic_feeder_3_3_g.webp',
+        main: true,
+      },
+    ],
   },
 ];
 

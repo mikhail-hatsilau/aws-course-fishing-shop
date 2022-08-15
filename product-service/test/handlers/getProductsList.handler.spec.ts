@@ -71,6 +71,7 @@ const getAllProductsServiceMockData = [
     title: 'Salmo Extreme BP Feeder 090 3.60 / 3133-360',
     categoryId: 'c8c1770a-abb1-4dba-92e0-07528757db58',
     count: 1,
+    images: [],
   },
   {
     description: 'Feeder SE F1',
@@ -79,6 +80,7 @@ const getAllProductsServiceMockData = [
     title: 'Feeder SE F1',
     categoryId: '33186d10-e4bf-4c07-9cca-df2fb2033067',
     count: 4,
+    images: [],
   },
 ];
 

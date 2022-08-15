@@ -72,6 +72,7 @@ const productMock = {
   title: 'Salmo Extreme BP Feeder 090 3.60 / 3133-360',
   categoryId: 'c8c1770a-abb1-4dba-92e0-07528757db58',
   count: 1,
+  images: [],
 };
 
 describe('getProductByIdHandler', () => {
