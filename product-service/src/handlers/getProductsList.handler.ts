@@ -2,14 +2,15 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 import { DefaultProductsService } from '../services/products.service';
 import { bootstrap } from './bootstrap';
 import { GetProductsFilter, getProductsSchema } from '../dto/productsFilter';
-import { HTTPResponse } from '../response/httpResponse';
+import { HTTPResponse } from '../helpers/response/httpResponse';
 import { HttpStatus } from '@nestjs/common';
 import middy from '@middy/core';
 import cors from '@middy/http-cors';
 import httpErrorHandler from '@middy/http-error-handler';
 import createHttpError from 'http-errors';
 import httpResponseSerializer from '@middy/http-response-serializer';
-import { defaultSerializers } from '../utils/serializers';
+import inputOutputLogger from '@middy/input-output-logger';
+import { defaultSerializers } from '../helpers/serializers';
 import { ValidationService } from '../services/validation.abstract.service';
 import { YupValidationService } from '../services/yupValidation.service';
 
@@ -39,6 +40,7 @@ const getProductsListHandler = async (event: APIGatewayProxyEvent) => {
 
 export const getProductsList = middy(getProductsListHandler)
   .use(cors())
+  .use(inputOutputLogger())
   .use(httpErrorHandler())
   .use(
     httpResponseSerializer({

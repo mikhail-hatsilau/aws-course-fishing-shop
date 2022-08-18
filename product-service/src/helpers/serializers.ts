@@ -6,10 +6,7 @@ export const defaultSerializers: Exclude<
 >['serializers'] = [
   {
     regex: /^application\/json$/,
-    serializer: ({ body }) => {
-      console.log(body);
-      return JSON.stringify(body);
-    },
+    serializer: ({ body }) => JSON.stringify(body),
   },
   {
     regex: /^text\/plain$/,

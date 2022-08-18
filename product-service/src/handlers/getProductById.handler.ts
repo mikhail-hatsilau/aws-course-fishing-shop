@@ -6,13 +6,14 @@ import {
   GetProductByIdPathParams,
   getProductByIdPathParamsSchema,
 } from '../dto/productsFilter';
-import { HTTPResponse } from '../response/httpResponse';
+import { HTTPResponse } from '../helpers/response/httpResponse';
 import { DefaultProductsService } from '../services/products.service';
 import { bootstrap } from './bootstrap';
 import httpErrorHandler from '@middy/http-error-handler';
 import httpResponseSerializer from '@middy/http-response-serializer';
+import inputOutputLogger from '@middy/input-output-logger';
 import createHttpError from 'http-errors';
-import { defaultSerializers } from '../utils/serializers';
+import { defaultSerializers } from '../helpers/serializers';
 import { ValidationService } from '../services/validation.abstract.service';
 import { YupValidationService } from '../services/yupValidation.service';
 
@@ -48,6 +49,7 @@ const getProductByIdHandler = async (event: APIGatewayProxyEvent) => {
 
 export const getProductById = middy(getProductByIdHandler)
   .use(cors())
+  .use(inputOutputLogger())
   .use(httpErrorHandler())
   .use(
     httpResponseSerializer({
