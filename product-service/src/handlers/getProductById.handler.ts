@@ -9,48 +9,51 @@ import {
 import { HTTPResponse } from '../helpers/response/httpResponse';
 import { DefaultProductsService } from '../services/products.service';
 import { bootstrap } from './bootstrap';
-import httpErrorHandler from '@middy/http-error-handler';
 import httpResponseSerializer from '@middy/http-response-serializer';
 import inputOutputLogger from '@middy/input-output-logger';
-import createHttpError from 'http-errors';
 import { defaultSerializers } from '../helpers/serializers';
 import { ValidationService } from '../services/validation.abstract.service';
 import { YupValidationService } from '../services/yupValidation.service';
 
 const getProductByIdHandler = async (event: APIGatewayProxyEvent) => {
-  const { pathParameters } = event;
-  const app = await bootstrap();
-  const validationService = app.get<YupValidationService>(ValidationService);
-
-  let pathParams: GetProductByIdPathParams;
   try {
-    pathParams = await validationService.validate(
-      getProductByIdPathParamsSchema,
-      pathParameters,
+    const { pathParameters } = event;
+    const app = await bootstrap();
+    const validationService = app.get<YupValidationService>(ValidationService);
+
+    let pathParams: GetProductByIdPathParams;
+    try {
+      pathParams = await validationService.validate(
+        getProductByIdPathParamsSchema,
+        pathParameters,
+      );
+    } catch (error) {
+      return new HTTPResponse(HttpStatus.BAD_REQUEST, error);
+    }
+
+    const productsService = await app.resolve(DefaultProductsService);
+    const product = await productsService.getById(pathParams.id);
+
+    if (!product) {
+      return new HTTPResponse(
+        HttpStatus.NOT_FOUND,
+        `Product with id ${pathParameters?.id} does not exist or out of stock`,
+      );
+    }
+
+    return new HTTPResponse(HttpStatus.OK, product);
+  } catch (e) {
+    console.error('Error encountered: ', e);
+    return new HTTPResponse(
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      'Internal Server Error',
     );
-  } catch (error) {
-    throw createHttpError(HttpStatus.BAD_REQUEST, {
-      message: JSON.stringify(error),
-    });
   }
-
-  const productsService = await app.resolve(DefaultProductsService);
-  const product = await productsService.getById(pathParams.id);
-
-  if (!product) {
-    throw createHttpError(
-      HttpStatus.NOT_FOUND,
-      `Product with id ${pathParameters?.id} does not exist`,
-    );
-  }
-
-  return new HTTPResponse(HttpStatus.OK, product);
 };
 
 export const getProductById = middy(getProductByIdHandler)
   .use(cors())
   .use(inputOutputLogger())
-  .use(httpErrorHandler())
   .use(
     httpResponseSerializer({
       serializers: defaultSerializers,

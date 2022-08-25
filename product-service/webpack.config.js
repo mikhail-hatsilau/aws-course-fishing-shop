@@ -19,6 +19,10 @@ module.exports = {
         loader: 'ts-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.sql$/,
+        type: 'asset/source'
+      }
     ],
   },
   resolve: {

@@ -7,6 +7,12 @@ provider:
   stage: dev
   runtime: nodejs14.x
   region: eu-west-1
+  environment:
+    DB_NAME: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/db}
+    DB_HOST: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/host}
+    DB_PORT: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/port}
+    DB_USER: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/user}
+    DB_SECRET: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/secret}
 
 plugins:
   - serverless-webpack

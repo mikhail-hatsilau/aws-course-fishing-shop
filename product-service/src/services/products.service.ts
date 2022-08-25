@@ -11,7 +11,7 @@ export class DefaultProductsService implements ProductsService {
   async getAll(filter: GetProductsFilter): Promise<Product[]> {
     const { categoryId } = filter;
     return categoryId
-      ? this.repository.getAll((product) => product.categoryId === categoryId)
+      ? this.repository.getAll({ categoryId })
       : this.repository.getAll();
   }
 

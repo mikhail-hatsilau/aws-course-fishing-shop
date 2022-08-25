@@ -103,8 +103,15 @@ const products: Product[] = [
 
 @Injectable()
 export class MockProductsRepository implements ProductsRepository {
-  async getAll(query?: (product: Product) => boolean): Promise<Product[]> {
-    return query ? products.filter(query) : products;
+  async getAll(query: Partial<Product> = {}): Promise<Product[]> {
+    return query
+      ? products.filter((product) =>
+          Object.keys(query).every(
+            (key) =>
+              product[key as keyof Product] === query[key as keyof Product],
+          ),
+        )
+      : products;
   }
   async get(id: string): Promise<Product | undefined> {
     return products.find((product) => product.id === id);
