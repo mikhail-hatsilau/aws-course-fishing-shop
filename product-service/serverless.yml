@@ -40,6 +40,13 @@ functions:
           method: get
           path: /api/v1/products/{id}
           cors: true
+  createProduct:
+    handler: src/handler.createProduct
+    events:
+      - http:
+          method: post
+          path: /api/v1/products
+          cors: true
 
 resources:
   Resources:

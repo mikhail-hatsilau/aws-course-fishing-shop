@@ -87,4 +87,8 @@ describe('ProductsService', () => {
       expect(product).toBeUndefined();
     });
   });
+
+  describe('creation of product', () => {
+    it('should create product successfully', () => {});
+  });
 });
