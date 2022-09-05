@@ -1,0 +1,98 @@
+service: product-service
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs14.x
+  region: eu-west-1
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+custom:
+  webpack:
+    webpackConfig: './webpack.config.js'
+    includeModules: true
+    packager: 'npm'
+    excludeFiles: tests/**/*.spec.js
+
+functions:
+  getProductsList:
+    handler: src/handler.getProductsList
+    events:
+      - http:
+          method: get
+          path: /api/v1/products
+          cors: true
+  getProductById:
+    handler: src/handler.getProductById
+    events:
+      - http:
+          method: get
+          path: /api/v1/products/{id}
+          cors: true
+
+resources:
+  Resources:
+    OriginAccessIdentity:
+      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment: "Images Gallery OAI"
+    ImagesS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: fshm-products-images-dev
+        AccessControl: BucketOwnerFullControl
+        WebsiteConfiguration:
+          IndexDocument: index.html
+    ImagesS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref ImagesS3Bucket
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Action:
+                - 's3:GetObject'
+              Effect: Allow
+              Principal:
+                AWS: !Join
+                  - ''
+                  - - 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity'
+                    - ' '
+                    - !Ref OriginAccessIdentity
+              Resource: !Join 
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !Ref ImagesS3Bucket
+                  - /*
+    ImagesCloudFrontDistribution:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        DistributionConfig:
+          Origins:
+            - DomainName: !GetAtt ImagesS3Bucket.RegionalDomainName
+              Id: ImagesGallery
+              S3OriginConfig:
+                OriginAccessIdentity: !Join
+                  - ''
+                  - - origin-access-identity/cloudfront/
+                    - !Ref OriginAccessIdentity
+          Enabled: 'true'
+          DefaultCacheBehavior:
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            TargetOriginId: ImagesGallery
+            ForwardedValues:
+              QueryString: 'false'
+              Cookies:
+                Forward: none
+            ViewerProtocolPolicy: redirect-to-https
+          ViewerCertificate:
+            CloudFrontDefaultCertificate: 'true'
