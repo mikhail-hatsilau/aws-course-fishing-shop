@@ -4,4 +4,5 @@ export interface EnvVariables {
   DB_PORT: string;
   DB_USER: string;
   DB_SECRET: string;
+  REGION: string;
 }

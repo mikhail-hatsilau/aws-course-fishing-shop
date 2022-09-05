@@ -1,0 +1,92 @@
+[
+    {
+        "id": { "S": "7676c1dd-893c-4291-a129-bfec6d795793" },
+        "title": { "S": "Salmo Extreme BP Feeder 090 3.60 / 3133-360" },
+        "description": { "S": "Salmo Extreme BP Feeder 090 3.60 / 3133-360" },
+        "count": { "N": "4" },
+        "categoryId": { "S": "13ae7e79-db10-46cb-9b07-756f4752351e" },
+        "images": { "L": [
+            { "M": {
+                "id": { "S": "5c6eef1d-e19e-4ae0-9b3c-c36d517911e8" },
+                "source": { "S": "https://d3l7qw9cnbm9m7.cloudfront.net/salmo_extreme_feeder_bp_090.webp" },
+                "main": { "BOOL": "true" }
+            } }
+        ] },
+        "price": { "N": "110" }
+    },
+    {
+        "id": { "S": "1ee9d571-755c-4f8f-aa78-e3764c1efa31" },
+        "title": { "S": "RS Sport Feeder" },
+        "description": { "S": "RS Sport Feeder" },
+        "count": { "N": "8" },
+        "categoryId": { "S": "a04fa8a8-07c2-4742-a7e0-2e0b41f773ef" },
+        "images": { "L": [
+            { "M": {
+                "id": { "S": "f7161b1c-9474-4f66-8390-7a06bf26ccc0" },
+                "source": { "S": "https://d3l7qw9cnbm9m7.cloudfront.net/rs_sport_feeder_reka.webp" },
+                "main": { "BOOL": "true" }
+            } }
+        ] },
+        "price": { "N": "3" }
+    },
+    {
+        "id": { "S": "e22452e6-59ce-4426-9b6a-bb0f10b67952" },
+        "title": { "S": "Feeder Concept Distance 70 3.60 / FCDI070-360" },
+        "description": { "S": "Feeder Concept Distance 70 3.60 / FCDI070-360" },
+        "count": { "N": "3" },
+        "categoryId": { "S": "13ae7e79-db10-46cb-9b07-756f4752351e" },
+        "images": { "L": [
+            { "M": {
+                "id": { "S": "245151e8-43da-40e5-b855-66c3762d7d6f" },
+                "source": { "S": "https://d3l7qw9cnbm9m7.cloudfront.net/feeder_concept_distance_70.webp" },
+                "main": { "BOOL": "true" }
+            } }
+        ] },
+        "price": { "N": "100" }
+    },
+    {
+        "id": { "S": "9306adb5-9bc7-4b99-b74c-4bb7f136e3f0" },
+        "title": { "S": "Salmo Diamond BP Feeder 090 3.90 / 4029-390" },
+        "description": { "S": "Salmo Diamond BP Feeder 090 3.90 / 4029-390" },
+        "count": { "N": "10" },
+        "categoryId": { "S": "13ae7e79-db10-46cb-9b07-756f4752351e" },
+        "images": { "L": [
+            { "M": {
+                "id": { "S": "40ea604f-9d2f-426c-bc8f-344024c626e6" },
+                "source": { "S": "https://d3l7qw9cnbm9m7.cloudfront.net/salmo_diamond_bp_feeder_090.webp" },
+                "main": { "BOOL": "true" }
+            } }
+        ] },
+        "price": { "N": "60" }
+    },
+    {
+        "id": { "S": "321f4a72-019b-4567-9fc5-f2029029fff0" },
+        "title": { "S": "Salmo Extreme BP Feeder 150 3.60 / 3138-360" },
+        "description": { "S": "Salmo Extreme BP Feeder 150 3.60 / 3138-360" },
+        "count": { "N": "9" },
+        "categoryId": { "S": "13ae7e79-db10-46cb-9b07-756f4752351e" },
+        "images": { "L": [
+            { "M": {
+                "id": { "S": "8285ba84-f80d-4fa5-94cd-e59022068296" },
+                "source": { "S": "https://d3l7qw9cnbm9m7.cloudfront.net/salmo_extreme_bp_feeder_150.webp" },
+                "main": { "BOOL": true }
+            } }
+        ] },
+        "price": { "N": "80" }
+    },
+    {
+        "id": { "S": "49b0aa48-1104-4936-9551-d95f17e03c9e" },
+        "title": { "S": "Sensas 3000 Super Feeder River" },
+        "description": { "S": "Sensas 3000 Super Feeder River" },
+        "count": { "N": "50" },
+        "categoryId": { "S": "a04fa8a8-07c2-4742-a7e0-2e0b41f773ef" },
+        "images": { "L": [
+            { "M": {
+                "id": { "S": "cc16753a-baf2-4ada-ae47-7c0e33f0b05b" },
+                "source": { "S": "https://d3l7qw9cnbm9m7.cloudfront.net/sensas_3000_super_feeder_river.webp" },
+                "main": { "BOOL": true }
+            } }
+        ] },
+        "price": { "N": "5" }
+    }
+]
