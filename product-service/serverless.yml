@@ -7,6 +7,19 @@ provider:
   stage: dev
   runtime: nodejs14.x
   region: eu-west-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - { "Fn::GetAtt": ["productsTable", "Arn" ] }
   environment:
     DB_NAME: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/db}
     DB_HOST: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/host}
@@ -14,6 +27,7 @@ provider:
     DB_USER: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/user}
     DB_SECRET: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/secret}
     REGION: ${self:provider.region}
+    PRODUCTS_TABLE_NAME: products-${self:provider.stage}
 
 plugins:
   - serverless-webpack
