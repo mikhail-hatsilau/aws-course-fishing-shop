@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "version" : "2022-08-10T13:47:39Z",
+    "version" : "2022-09-07T20:47:08Z",
     "title" : "dev-product-service"
   },
   "host" : "27wh4vosp4.execute-api.eu-west-1.amazonaws.com",
@@ -12,10 +12,19 @@
       "get" : {
         "responses" : { },
         "x-amazon-apigateway-integration" : {
-          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:497705059847:function:product-service-dev-getProductsList/invocations",
-          "passthroughBehavior" : "when_no_match"
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
+        }
+      },
+      "post" : {
+        "responses" : { },
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:497705059847:function:product-service-dev-createProduct/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -38,12 +47,11 @@
           }
         },
         "x-amazon-apigateway-integration" : {
-          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "200",
               "responseParameters" : {
-                "method.response.header.Access-Control-Allow-Methods" : "'OPTIONS,GET'",
+                "method.response.header.Access-Control-Allow-Methods" : "'OPTIONS,POST,GET'",
                 "method.response.header.Access-Control-Allow-Headers" : "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
                 "method.response.header.Access-Control-Allow-Origin" : "'*'"
               }
@@ -53,7 +61,8 @@
             "application/json" : "{statusCode:200}"
           },
           "passthroughBehavior" : "when_no_match",
-          "contentHandling" : "CONVERT_TO_TEXT"
+          "contentHandling" : "CONVERT_TO_TEXT",
+          "type" : "mock"
         }
       }
     },
@@ -67,10 +76,10 @@
         } ],
         "responses" : { },
         "x-amazon-apigateway-integration" : {
-          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:497705059847:function:product-service-dev-getProductById/invocations",
-          "passthroughBehavior" : "when_no_match"
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -99,7 +108,6 @@
           }
         },
         "x-amazon-apigateway-integration" : {
-          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "200",
@@ -114,7 +122,8 @@
             "application/json" : "{statusCode:200}"
           },
           "passthroughBehavior" : "when_no_match",
-          "contentHandling" : "CONVERT_TO_TEXT"
+          "contentHandling" : "CONVERT_TO_TEXT",
+          "type" : "mock"
         }
       }
     }
