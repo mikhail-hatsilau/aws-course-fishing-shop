@@ -1,7 +1,20 @@
+import { Test } from '@nestjs/testing';
 import { APIGatewayProxyEvent } from 'aws-lambda';
+import { bootstrap } from '../../src/handlers/bootstrap';
 import { Product } from '../../src/dto/product';
 import { getProductsList } from '../../src/handlers/getProductsList.handler';
 import { DefaultProductsService } from '../../src/services/products.service';
+import { ProductsRepository } from '../../src/repositories/products.abstract.repository';
+import { MockProductsRepository } from '../mocks/productsMock.repository';
+import { Config } from '../../src/helpers/config';
+import { ValidationService } from '../../src/services/validation.abstract.service';
+import { YupValidationService } from '../../src/services/yupValidation.service';
+
+jest.mock('../../src/handlers/bootstrap', () => {
+  return {
+    bootstrap: jest.fn(),
+  };
+});
 
 const mockEvent: APIGatewayProxyEvent = {
   body: '',
@@ -88,6 +101,18 @@ describe('getProductsListHandler', () => {
   let getAllSpy: jest.SpyInstance<Promise<Product[]>>;
 
   beforeEach(async () => {
+    (bootstrap as jest.Mock).mockImplementation(async () => {
+      const moduleRef = await Test.createTestingModule({
+        controllers: [],
+        providers: [
+          Config,
+          DefaultProductsService,
+          { provide: ValidationService, useClass: YupValidationService },
+          { provide: ProductsRepository, useClass: MockProductsRepository },
+        ],
+      }).compile();
+      return moduleRef;
+    });
     getAllSpy = jest
       .spyOn(DefaultProductsService.prototype, 'getAll')
       .mockImplementation(() => Promise.resolve(getAllProductsServiceMockData));
