@@ -1,4 +1,3 @@
-import { APIGatewayProxyEvent } from 'aws-lambda';
 import { Product } from '../../src/dto/product';
 import { bootstrap } from '../../src/handlers/bootstrap';
 import { createProduct } from '../../src/handlers/createProduct.handler';
