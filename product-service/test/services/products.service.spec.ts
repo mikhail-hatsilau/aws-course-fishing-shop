@@ -6,6 +6,7 @@ import { DefaultProductsService } from '../../src/services/products.service';
 const mockProductsRepository = {
   getAll: jest.fn(),
   get: jest.fn(),
+  insert: jest.fn(),
 };
 
 const productsMock = [
@@ -16,6 +17,7 @@ const productsMock = [
     title: 'Salmo Extreme BP Feeder 090 3.60 / 3133-360',
     categoryId: 'c8c1770a-abb1-4dba-92e0-07528757db58',
     count: 1,
+    images: [],
   },
   {
     description: 'Feeder SE F1',
@@ -24,6 +26,7 @@ const productsMock = [
     title: 'Feeder SE F1',
     categoryId: '33186d10-e4bf-4c07-9cca-df2fb2033067',
     count: 4,
+    images: [],
   },
 ];
 
@@ -44,6 +47,7 @@ describe('ProductsService', () => {
   afterEach(() => {
     mockProductsRepository.getAll.mockRestore();
     mockProductsRepository.get.mockRestore();
+    mockProductsRepository.insert.mockRestore();
   });
 
   describe('getAll', () => {
@@ -57,8 +61,11 @@ describe('ProductsService', () => {
     });
 
     it('should return products filtered by passed categoryId', async () => {
-      mockProductsRepository.getAll.mockImplementation((predicate) =>
-        Promise.resolve(productsMock.filter(predicate)),
+      mockProductsRepository.getAll.mockImplementation(
+        ({ categoryId }: { categoryId: string }) =>
+          Promise.resolve(
+            productsMock.filter((product) => product.categoryId === categoryId),
+          ),
       );
 
       const products = await productsService.getAll({
@@ -85,6 +92,21 @@ describe('ProductsService', () => {
         'c8c1770a-abb1-4dba-92e0-07528757db58',
       );
       expect(product).toBeUndefined();
+    });
+  });
+
+  describe('creation of product', () => {
+    it('should create product successfully', async () => {
+      mockProductsRepository.insert.mockReturnValue(
+        Promise.resolve(productsMock[0]),
+      );
+
+      const product = await productsService.createProduct(productsMock[0]);
+
+      expect(mockProductsRepository.insert).toHaveBeenCalledWith(
+        productsMock[0],
+      );
+      expect(product).toEqual(productsMock[0]);
     });
   });
 });

@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createProductHandler should return 400 when incorrect product is passed 1`] = `
+HTTPResponse {
+  "body": "{\\"value\\":{\\"images\\":[],\\"count\\":1,\\"categoryId\\":\\"c8c1770a-abb1-4dba-92e0-07528757db58\\",\\"description\\":\\"Salmo Extreme BP Feeder 090 3.60 / 3133-360\\",\\"title\\":\\"\\"},\\"path\\":\\"price\\",\\"type\\":\\"required\\",\\"errors\\":[\\"price is a required field\\"],\\"params\\":{\\"path\\":\\"price\\"},\\"inner\\":[],\\"name\\":\\"ValidationError\\",\\"message\\":\\"price is a required field\\"}",
+  "cookies": undefined,
+  "headers": Object {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json",
+  },
+  "isBase64Encoded": undefined,
+  "statusCode": 400,
+}
+`;

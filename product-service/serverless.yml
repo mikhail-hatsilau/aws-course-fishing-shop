@@ -7,6 +7,27 @@ provider:
   stage: dev
   runtime: nodejs14.x
   region: eu-west-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - { "Fn::GetAtt": ["productsTable", "Arn" ] }
+  environment:
+    DB_NAME: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/db}
+    DB_HOST: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/host}
+    DB_PORT: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/port}
+    DB_USER: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/user}
+    DB_SECRET: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/secret}
+    REGION: ${self:provider.region}
+    PRODUCTS_TABLE_NAME: products-${self:provider.stage}
 
 plugins:
   - serverless-webpack
@@ -34,9 +55,56 @@ functions:
           method: get
           path: /api/v1/products/{id}
           cors: true
+  createProduct:
+    handler: src/handler.createProduct
+    events:
+      - http:
+          method: post
+          path: /api/v1/products
+          cors: true
 
 resources:
   Resources:
+    productsTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: products-${self:provider.stage}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: title
+            AttributeType: S
+          - AttributeName: count
+            AttributeType: N
+          - AttributeName: categoryId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: title
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: ProductsCount
+            KeySchema:
+              - AttributeName: count
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+          - IndexName: ProductsCategory
+            KeySchema:
+              - AttributeName: categoryId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
     OriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
       Properties:

@@ -35,4 +35,7 @@ export class MockProductsCategoriesRepository
   async get(id: string): Promise<ProductCategory | undefined> {
     return productCategories.find((category) => category.id === id);
   }
+  insert(_data: Omit<ProductCategory, 'id'>): Promise<ProductCategory> {
+    throw new Error('Method not implemented.');
+  }
 }

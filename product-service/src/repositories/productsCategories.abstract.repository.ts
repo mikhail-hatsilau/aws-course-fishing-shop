@@ -6,4 +6,5 @@ export abstract class ProductsCategoriesRepository
 {
   abstract getAll(): Promise<ProductCategory[]>;
   abstract get(id: string): Promise<ProductCategory | undefined>;
+  abstract insert(data: Omit<ProductCategory, 'id'>): Promise<ProductCategory>;
 }
