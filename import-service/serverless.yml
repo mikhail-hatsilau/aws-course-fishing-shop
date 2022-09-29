@@ -1,0 +1,57 @@
+service: import-service
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs14.x
+  region: eu-west-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: 's3:ListBucket'
+          Resource:
+            - 'arn:aws:s3:::${self:custom.bucketName}'
+        - Effect: Allow
+          Action:
+            - 's3:*'
+          Resource:
+            - 'arn:aws:s3:::${self:custom.bucketName}/*'
+  environment:
+    FILES_BUCKET_NAME: ${self:custom.bucketName}
+    REGION: ${self:provider.region}
+    UPLOAD_FOLDER: uploaded
+    PARSED_FOLDER: parsed
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+custom:
+  bucketName: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/s3/import}
+  webpack:
+    webpackConfig: './webpack.config.js'
+    includeModules: true
+    packager: 'npm'
+    excludeFiles: tests/**/*.spec.js
+
+functions:
+  importProductsFile:
+    handler: src/handler.importProductsFile
+    events:
+      - http:
+          method: get
+          path: /api/v1/import
+          cors: true
+  importFileParser:
+    handler: src/handler.importFileParser
+    events:
+      - s3:
+          bucket: ${self:custom.bucketName}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploaded/
+            - suffix: .csv
+          existing: true
