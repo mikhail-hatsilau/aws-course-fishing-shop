@@ -8,7 +8,6 @@ import { DefaultProductsService } from '../services/products.service';
 import { ValidationService } from '../services/validation.abstract.service';
 import { YupValidationService } from '../services/yupValidation.service';
 import { DynamoDBModule } from './dynamoDb.module';
-import { PGModule } from './pg.module';
 
 @Module({
   providers: [
@@ -21,6 +20,6 @@ import { PGModule } from './pg.module';
       useClass: MockProductsCategoriesRepository,
     },
   ],
-  imports: [PGModule, DynamoDBModule],
+  imports: [DynamoDBModule],
 })
 export class AppModule {}
