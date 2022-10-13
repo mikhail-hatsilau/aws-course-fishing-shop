@@ -1,9 +1,14 @@
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocument, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import { Inject, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Config } from '../helpers/config';
 import { CreateProductRequest, Product } from '../dto/product';
 import { ProductsRepository } from './products.abstract.repository';
+import { TransactionCanceledException } from '@aws-sdk/client-dynamodb';
+import {
+  ProductError,
+  ProductErrorCodes,
+} from '../helpers/errors/productError';
 
 @Injectable()
 export class DynamoProductsRepository implements ProductsRepository {
@@ -13,9 +18,8 @@ export class DynamoProductsRepository implements ProductsRepository {
   ) {}
 
   async getAll(query: Partial<Product> = {}): Promise<Product[]> {
-    const { categoryId } = query;
-    if (categoryId) {
-      return this.queryProductsByCategoryId(categoryId);
+    if (Object.keys(query).length) {
+      return this.queryProductsByKeys(query);
     }
 
     return this.scanProducts();
@@ -43,17 +47,38 @@ export class DynamoProductsRepository implements ProductsRepository {
       },
     };
     const params = {
-      TableName: this.config.getEnvVariable('PRODUCTS_TABLE_NAME'),
-      Item: {
-        id: uuidv4(),
-        ...{
-          ...product,
-          images: product.images.map((image) => ({ id: uuidv4(), ...image })),
+      TransactItems: [
+        {
+          Put: {
+            TableName: this.config.getEnvVariable('PRODUCTS_TABLE_NAME'),
+            ConditionExpression: 'attribute_not_exists(id)',
+            Item: newProductItem,
+          },
         },
-      },
+        {
+          Put: {
+            TableName: this.config.getEnvVariable('PRODUCTS_TABLE_NAME'),
+            ConditionExpression: 'attribute_not_exists(id)',
+            Item: {
+              id: `title#${newProductItem.title}`,
+              title: newProductItem.title,
+            },
+          },
+        },
+      ],
     };
 
-    await this.client.put(params);
+    try {
+      await this.client.transactWrite(params);
+    } catch (e) {
+      if (
+        e instanceof TransactionCanceledException &&
+        e.CancellationReasons?.[1]?.Code === 'ConditionalCheckFailed'
+      ) {
+        throw new ProductError(ProductErrorCodes.NOT_UNIQ, e.message);
+      }
+      throw e;
+    }
 
     return newProductItem;
   }
@@ -61,24 +86,44 @@ export class DynamoProductsRepository implements ProductsRepository {
   private async scanProducts(): Promise<Product[]> {
     const params = {
       TableName: this.config.getEnvVariable('PRODUCTS_TABLE_NAME'),
+      FilterExpression: '#count > :count',
+      IndexName: 'ProductsCount',
+      ExpressionAttributeNames: {
+        '#count': 'count',
+      },
+      ExpressionAttributeValues: {
+        ':count': 0,
+      },
     };
 
     const data = await this.client.scan(params);
     return data.Items as Product[];
   }
 
-  private async queryProductsByCategoryId(
-    categoryId: string,
+  private async queryProductsByKeys(
+    query: Partial<Product>,
   ): Promise<Product[]> {
     const params = {
-      ExpressionAttributeValues: {
-        ':categoryId': categoryId,
-      },
-      IndexName: 'ProductsCategory',
-      KeyConditionExpression: '#categoryId = :categoryId',
-      ExpressionAttributeNames: {
-        '#categoryId': 'categoryId',
-      },
+      ...Object.keys(query).reduce(
+        (result, key) => ({
+          ...result,
+          ExpressionAttributeValues: {
+            ...result.ExpressionAttributeValues,
+            [`:${key}`]: query[key as keyof typeof query],
+          },
+          ExpressionAttributeNames: {
+            ...result.ExpressionAttributeNames,
+            [`#${key}`]: key,
+          },
+        }),
+        {} as QueryCommandInput,
+      ),
+      IndexName: 'ProductsCategory', // TODO: use dynamic indexes for dynamic expressions
+      KeyConditionExpression: Object.keys(query).reduce(
+        (result, key) =>
+          result ? `${result} and #${key} = :${key}` : `#${key} = :${key}`,
+        '',
+      ),
       TableName: this.config.getEnvVariable('PRODUCTS_TABLE_NAME'),
     };
 

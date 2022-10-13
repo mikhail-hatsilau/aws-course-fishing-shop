@@ -15,6 +15,7 @@ import {
 } from '../dto/product';
 import { ProductsService } from '../services/products.interface.service';
 import { DefaultProductsService } from '../services/products.service';
+import { ProductError } from '../helpers/errors/productError';
 
 const createProductHandler = async (event: Event) => {
   try {
@@ -30,9 +31,15 @@ const createProductHandler = async (event: Event) => {
 
     const product = body as CreateProductRequest;
     const productsService = app.get<ProductsService>(DefaultProductsService);
-    const createdProduct = await productsService.createProduct(product);
-
-    return new HTTPResponse(HttpStatus.OK, createdProduct);
+    try {
+      const createdProduct = await productsService.createProduct(product);
+      return new HTTPResponse(HttpStatus.OK, createdProduct);
+    } catch (e) {
+      if (e instanceof ProductError) {
+        return new HTTPResponse(HttpStatus.BAD_REQUEST, e.message);
+      }
+      throw e;
+    }
   } catch (e) {
     console.error('Error encountered: ', e);
     return new HTTPResponse(
