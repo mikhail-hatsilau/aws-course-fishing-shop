@@ -8,7 +8,7 @@
         "images": { "L": [
             { "M": {
                 "id": { "S": "5c6eef1d-e19e-4ae0-9b3c-c36d517911e8" },
-                "source": { "S": "https://d3l7qw9cnbm9m7.cloudfront.net/salmo_extreme_feeder_bp_090.webp" },
+                "source": { "S": "https://dou0q3ixl7clp.cloudfront.net/salmo_extreme_feeder_bp_090.webp" },
                 "main": { "BOOL": "true" }
             } }
         ] },
@@ -23,7 +23,7 @@
         "images": { "L": [
             { "M": {
                 "id": { "S": "f7161b1c-9474-4f66-8390-7a06bf26ccc0" },
-                "source": { "S": "https://d3l7qw9cnbm9m7.cloudfront.net/rs_sport_feeder_reka.webp" },
+                "source": { "S": "https://dou0q3ixl7clp.cloudfront.net/rs_sport_feeder_reka.webp" },
                 "main": { "BOOL": "true" }
             } }
         ] },
@@ -38,7 +38,7 @@
         "images": { "L": [
             { "M": {
                 "id": { "S": "245151e8-43da-40e5-b855-66c3762d7d6f" },
-                "source": { "S": "https://d3l7qw9cnbm9m7.cloudfront.net/feeder_concept_distance_70.webp" },
+                "source": { "S": "https://dou0q3ixl7clp.cloudfront.net/feeder_concept_distance_70.webp" },
                 "main": { "BOOL": "true" }
             } }
         ] },
@@ -53,7 +53,7 @@
         "images": { "L": [
             { "M": {
                 "id": { "S": "40ea604f-9d2f-426c-bc8f-344024c626e6" },
-                "source": { "S": "https://d3l7qw9cnbm9m7.cloudfront.net/salmo_diamond_bp_feeder_090.webp" },
+                "source": { "S": "https://dou0q3ixl7clp.cloudfront.net/salmo_diamond_bp_feeder_090.webp" },
                 "main": { "BOOL": "true" }
             } }
         ] },
@@ -68,7 +68,7 @@
         "images": { "L": [
             { "M": {
                 "id": { "S": "8285ba84-f80d-4fa5-94cd-e59022068296" },
-                "source": { "S": "https://d3l7qw9cnbm9m7.cloudfront.net/salmo_extreme_bp_feeder_150.webp" },
+                "source": { "S": "https://dou0q3ixl7clp.cloudfront.net/salmo_extreme_bp_feeder_150.webp" },
                 "main": { "BOOL": true }
             } }
         ] },
@@ -83,7 +83,7 @@
         "images": { "L": [
             { "M": {
                 "id": { "S": "cc16753a-baf2-4ada-ae47-7c0e33f0b05b" },
-                "source": { "S": "https://d3l7qw9cnbm9m7.cloudfront.net/sensas_3000_super_feeder_river.webp" },
+                "source": { "S": "https://dou0q3ixl7clp.cloudfront.net/sensas_3000_super_feeder_river.webp" },
                 "main": { "BOOL": true }
             } }
         ] },
