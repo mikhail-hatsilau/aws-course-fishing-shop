@@ -4,7 +4,7 @@
     "version" : "2022-09-07T20:47:08Z",
     "title" : "dev-product-service"
   },
-  "host" : "27wh4vosp4.execute-api.eu-west-1.amazonaws.com",
+  "host" : "jwob72q496.execute-api.eu-west-1.amazonaws.com",
   "basePath" : "/dev",
   "schemes" : [ "https" ],
   "paths" : {

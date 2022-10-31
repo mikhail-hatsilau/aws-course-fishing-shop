@@ -6,4 +6,5 @@ export interface EnvVariables {
   DB_SECRET: string;
   REGION: string;
   PRODUCTS_TABLE_NAME: string;
+  SNS_ARN: string;
 }

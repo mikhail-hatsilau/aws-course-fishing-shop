@@ -19,11 +19,17 @@ provider:
             - 's3:*'
           Resource:
             - 'arn:aws:s3:::${self:custom.bucketName}/*'
+        - Effect: Allow
+          Action:
+            - sqs:*
+          Resource:
+            - ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/sqs/arn}
   environment:
     FILES_BUCKET_NAME: ${self:custom.bucketName}
     REGION: ${self:provider.region}
     UPLOAD_FOLDER: uploaded
     PARSED_FOLDER: parsed
+    SQS_URL: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/sqs/url}
 
 plugins:
   - serverless-webpack

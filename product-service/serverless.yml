@@ -19,7 +19,21 @@ provider:
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
           Resource:
-            - { "Fn::GetAtt": ["productsTable", "Arn" ] }
+            - Fn::GetAtt:
+                - productsTable
+                - Arn
+        - Effect: Allow
+          Action:
+            - sqs:*
+          Resource:
+            - Fn::GetAtt:
+                - CatalogItemsQueue
+                - Arn
+        - Effect: Allow
+          Action:
+            - sns:*
+          Resource: !Ref CreateCatalogItemTopic
+
   environment:
     DB_NAME: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/db}
     DB_HOST: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/host}
@@ -28,12 +42,15 @@ provider:
     DB_SECRET: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/secret}
     REGION: ${self:provider.region}
     PRODUCTS_TABLE_NAME: products-${self:provider.stage}
+    SNS_ARN: !Ref CreateCatalogItemTopic
 
 plugins:
   - serverless-webpack
   - serverless-offline
 
 custom:
+  SNSSubscriptionMainEmail: gatilov4@gmail.com
+  SNSSubscriptionProductManagerEmail: gatik-product-manager@mailsac.com
   webpack:
     webpackConfig: './webpack.config.js'
     includeModules: true
@@ -62,9 +79,43 @@ functions:
           method: post
           path: /api/v1/products
           cors: true
+  catalogBatchProcess:
+    handler: src/handler.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt:
+              - CatalogItemsQueue
+              - Arn
 
 resources:
   Resources:
+    CatalogItemsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: CatalogItemsQueue
+    CreateCatalogItemTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: CreateCatalogItemTopic
+    CreateCatalogItemSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        TopicArn: !Ref CreateCatalogItemTopic
+        Endpoint: ${self:custom.SNSSubscriptionMainEmail}
+        Protocol: email
+    CreateEmptyCatalogItemSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        TopicArn: !Ref CreateCatalogItemTopic
+        Endpoint: ${self:custom.SNSSubscriptionProductManagerEmail}
+        Protocol: email
+        FilterPolicy:
+          count:
+            - numeric:
+                - '='
+                - 0
     productsTable:
       Type: "AWS::DynamoDB::Table"
       Properties:
