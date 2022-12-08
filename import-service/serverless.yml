@@ -51,6 +51,9 @@ functions:
           method: get
           path: /api/v1/import
           cors: true
+          authorizer:
+            arn: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/authorizer/arn}
+            type: token
   importFileParser:
     handler: src/handler.importFileParser
     events:
@@ -61,3 +64,26 @@ functions:
             - prefix: uploaded/
             - suffix: .csv
           existing: true
+resources:
+  Resources:
+    GatewayResponseUnauthorized:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.WWW-Authenticate: "'Basic'"
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StatusCode: '401'
+    GatewayResponseForbidden:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: ACCESS_DENIED
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        StatusCode: '403'
