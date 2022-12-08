@@ -9,13 +9,17 @@ import { defaultSerializers } from '../helpers/serializers';
 import { ValidationService } from '../services/validation.abstract.service';
 import { YupValidationService } from '../services/yupValidation.service';
 import { fileNameQuerySchema } from '../dto/file';
-import { APIGatewayProxyHandlerV2 } from 'aws-lambda';
 import { FileUploadService } from '../services/fileUpload.interface.service';
 import { DefaultFileUploadService } from '../services/fileUpload.service';
+import { APIGatewayProxyHandlerV2WithLambdaAuthorizer } from 'aws-lambda/trigger/api-gateway-proxy';
+import { User } from '../dto/user';
 
-const importProductsFileHandler: APIGatewayProxyHandlerV2 = async (event) => {
+const importProductsFileHandler: APIGatewayProxyHandlerV2WithLambdaAuthorizer<
+  User
+> = async (event) => {
   try {
-    const { queryStringParameters } = event;
+    const { queryStringParameters, requestContext } = event;
+    console.log(requestContext.authorizer);
     const app = await bootstrap();
     const validationService = app.get<YupValidationService>(ValidationService);
 

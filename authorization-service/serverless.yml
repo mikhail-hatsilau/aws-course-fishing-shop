@@ -8,9 +8,6 @@ provider:
   runtime: nodejs14.x
   region: eu-west-1
 
-  environment:
-    CREDENTIALS: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/authorizer/credentials}
-
 plugins:
   - serverless-webpack
   - serverless-offline

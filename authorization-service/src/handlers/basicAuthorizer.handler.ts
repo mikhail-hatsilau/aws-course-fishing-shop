@@ -27,8 +27,10 @@ const basicAuthorizerHandler: Handler<
     throw new Error('Unauthorized');
   }
 
-  if (authorizationService.validateCredentials(authorizationToken)) {
-    return policyBuilder.buildAllowPolicy(authorizationToken, methodArn);
+  const user = await authorizationService.findUser(authorizationToken);
+
+  if (user) {
+    return policyBuilder.buildAllowPolicy(authorizationToken, methodArn, user);
   }
 
   return policyBuilder.buildDenyPolicy(authorizationToken, methodArn);
