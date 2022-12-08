@@ -1,3 +1,5 @@
+import { User } from '../dto/user';
+
 export interface AuthorizationService {
-  validateCredentials(token: string): boolean;
+  findUser(token: string): Promise<User | undefined>;
 }

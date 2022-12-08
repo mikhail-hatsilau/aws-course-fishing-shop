@@ -1,0 +1,72 @@
+service: cart-service
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs14.x
+  region: eu-west-1
+
+  environment:
+    DB_NAME: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/db}
+    DB_HOST: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/host}
+    DB_PORT: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/port}
+    DB_USER: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/user}
+    DB_SECRET: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/rds/secret}
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+custom:
+  webpack:
+    webpackConfig: './webpack.config.js'
+    includeModules:
+      forceInclude:
+        - pg
+    packager: 'npm'
+    excludeFiles: tests/**/*.spec.js
+
+functions:
+  listCart:
+    handler: src/handler.listCart
+    events:
+      - http:
+          method: get
+          path: /api/v1/cart
+          cors: true
+          authorizer:
+            arn: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/authorizer/arn}
+            type: token
+  addToCart:
+    handler: src/handler.addToCart
+    events:
+      - http:
+          method: post
+          path: /api/v1/cart
+          cors: true
+          authorizer:
+            arn: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/authorizer/arn}
+            type: token
+  removeFromCart:
+    handler: src/handler.removeFromCart
+    events:
+      - http:
+          method: delete
+          path: /api/v1/cart/{cartItemId}
+          cors: true
+          authorizer:
+            arn: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/authorizer/arn}
+            type: token
+  updateCart:
+    handler: src/handler.updateCart
+    events:
+      - http:
+          method: put
+          path: /api/v1/cart
+          cors: true
+          authorizer:
+            arn: ${ssm(${self:provider.region}):/fshm/${self:provider.stage}/authorizer/arn}
+            type: token
+

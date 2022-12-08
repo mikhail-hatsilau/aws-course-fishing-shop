@@ -1,17 +1,28 @@
-import { AuthorizationService } from './authorization.interface.service';
 import { Injectable } from '@nestjs/common';
+import bcrypt from 'bcryptjs';
+import { AuthorizationService } from './authorization.interface.service';
 import { Config } from '../helpers/config';
+import { MemoryUsersRepository } from '../repositories/memoryUsers.repository';
+import { User } from '../dto/user';
 
 @Injectable()
 export class BasicAuthorizationService implements AuthorizationService {
-  constructor(private readonly config: Config) {}
+  constructor(
+    private readonly config: Config,
+    private readonly usersRepository: MemoryUsersRepository,
+  ) {}
 
-  validateCredentials(token: string): boolean {
+  async findUser(token: string): Promise<User | undefined> {
     const [userName, password] = this.getCredentialsFromToken(token);
-    const [allowedUserName, allowedPassword] = this.splitCredentials(
-      this.config.getEnvVariable('CREDENTIALS'),
-    );
-    return userName === allowedUserName && password === allowedPassword;
+    const users = await this.usersRepository.getAll();
+
+    const user = users.find((user) => user.username === userName);
+
+    if (user && bcrypt.compareSync(password, user.password)) {
+      return user;
+    }
+
+    return undefined;
   }
 
   private getCredentialsFromToken(token: string) {
