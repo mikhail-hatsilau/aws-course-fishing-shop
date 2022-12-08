@@ -5,7 +5,7 @@ import { CartService } from './cart.interface.service';
 import { Cart } from '../entities/cart.entity';
 import { CartItem } from '../entities/cartItem.entity';
 import { CartItemRequest, UpdateCartItemRequest } from '../dto/cart';
-import { CartError, CartErrorCodes } from '../helpers/errors/productError';
+import { CartError, CartErrorCodes } from '../helpers/errors/cart-error';
 
 @Injectable()
 export class DefaultCartService implements CartService {

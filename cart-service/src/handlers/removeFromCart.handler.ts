@@ -14,7 +14,7 @@ import { HttpStatus } from '@nestjs/common';
 import { Handler } from 'aws-lambda';
 import { CartService } from '../services/cart.interface.service';
 import { DefaultCartService } from '../services/cart.service';
-import { CartError } from '../helpers/errors/productError';
+import { CartError } from '../helpers/errors/cart-error';
 
 const removeFromCartHandler: Handler<
   APIGatewayProxyEventV2WithRequestContext<
