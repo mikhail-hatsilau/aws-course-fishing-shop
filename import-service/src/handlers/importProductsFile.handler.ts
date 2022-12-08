@@ -18,8 +18,7 @@ const importProductsFileHandler: APIGatewayProxyHandlerV2WithLambdaAuthorizer<
   User
 > = async (event) => {
   try {
-    const { queryStringParameters, requestContext } = event;
-    console.log(requestContext.authorizer);
+    const { queryStringParameters } = event;
     const app = await bootstrap();
     const validationService = app.get<YupValidationService>(ValidationService);
 
