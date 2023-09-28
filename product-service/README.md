@@ -70,5 +70,3 @@ Which should result in response similar to the following:
     "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": \"\"\n}"
 }
 ```
-
-Experiment text changed
